@@ -11,14 +11,14 @@ st.write("Upload two fashion photos to compare them. If they match in color, you
 file1 = st.file_uploader("Upload the first photo", type=["jpg", "jpeg", "png"])
 file2 = st.file_uploader("Upload the second photo", type=["jpg", "jpeg", "png"])
 
-def compare_images_color(image1, image2, threshold=0.7):
+def compare_images_color(image1, image2, threshold=0.5):
     # Convert images to HSV color space
     hsv1 = cv2.cvtColor(image1, cv2.COLOR_BGR2HSV)
     hsv2 = cv2.cvtColor(image2, cv2.COLOR_BGR2HSV)
     
-    # Compute color histograms
-    hist1 = cv2.calcHist([hsv1], [0, 1, 2], None, [50, 60, 60], [0, 180, 0, 256, 0, 256])
-    hist2 = cv2.calcHist([hsv2], [0, 1, 2], None, [50, 60, 60], [0, 180, 0, 256, 0, 256])
+    # Compute color histograms with finer bin size
+    hist1 = cv2.calcHist([hsv1], [0, 1], None, [90, 128], [0, 180, 0, 256])
+    hist2 = cv2.calcHist([hsv2], [0, 1], None, [90, 128], [0, 180, 0, 256])
     
     # Normalize histograms
     hist1 = cv2.normalize(hist1, hist1).flatten()
@@ -47,3 +47,4 @@ if file1 and file2:
         st.success("✅ Fashion photos match in color!")
     else:
         st.error("❌ Fashion photos do not match in color!")
+
